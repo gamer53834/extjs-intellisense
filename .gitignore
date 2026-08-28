@@ -1,8 +1,4 @@
-```
-# Build outputs
-out/
-dist/
-build/
+
 target/
 
 # Dependencies
