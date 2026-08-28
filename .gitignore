@@ -1,1 +1,9 @@
-(data/extjs-ru.json)
+```
+# Build outputs
+out/
+dist/
+build/
+
+# Source maps
+*.map
+```
