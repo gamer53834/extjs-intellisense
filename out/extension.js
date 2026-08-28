@@ -112,6 +112,7 @@ async function loadExtJSIndex(extjsPath) {
      * Try to use bundled index first.
      */
     const bundledIndexPath = path.join(__dirname, "..", "data", "classes.json");
+    console.log(`[ExtJS] Looking for bundled index at: ${bundledIndexPath}`);
     let indexPath;
     let content;
     if (fs.existsSync(bundledIndexPath)) {

@@ -15,6 +15,10 @@
             "vscode"
         ]
     },
+    "include": [
+        "src/**/*",
+        "data/**/*"
+    ],
     "exclude": [
         "node_modules",
         ".vscode-test"

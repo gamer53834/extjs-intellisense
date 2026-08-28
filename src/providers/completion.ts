@@ -16,8 +16,28 @@ export function setCompletionResolver(
     resolver = value;
 
     console.log(
-        "[ExtJS Completion] Resolver: SET"
+        "[ExtJS Completion] Resolver: SET",
+        resolver ? "OK" : "UNDEFINED"
     );
+
+    if (resolver) {
+        const testType = resolver.resolveExpression(
+            "grid.getStore()",
+            { grid: "Ext.grid.Panel" }
+        );
+        console.log(
+            "[ExtJS Completion] Test resolve 'grid.getStore()':",
+            testType
+        );
+
+        if (testType.kind === "class") {
+            const members = resolver.getMembers(testType.name);
+            console.log(
+                `[ExtJS Completion] Store has ${members.length} members`,
+                members.slice(0, 5).map(m => m.name)
+            );
+        }
+    }
 }
 
 function getClass(
@@ -246,6 +266,23 @@ function extractVariables(
         "[ExtJS Completion] Variables:",
         variables
     );
+
+    if (resolver && Object.keys(variables).length > 0) {
+        for (const [varName, varType] of Object.entries(variables)) {
+            console.log(
+                `[ExtJS Completion] Variable '${varName}' = ${varType}`
+            );
+            
+            const cls = resolver.getClass(varType);
+            if (cls) {
+                const methodCount = Object.keys(cls.methods || {}).length;
+                const propertyCount = Object.keys(cls.properties || {}).length;
+                console.log(
+                    `[ExtJS Completion] Class '${varType}' has ${methodCount} methods, ${propertyCount} properties`
+                );
+            }
+        }
+    }
 
     return variables;
 }

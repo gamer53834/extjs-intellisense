@@ -217,6 +217,10 @@ async function loadExtJSIndex(
             "classes.json"
         );
 
+    console.log(
+        `[ExtJS] Looking for bundled index at: ${bundledIndexPath}`
+    );
+
     let indexPath: string | undefined;
     let content: string;
 
