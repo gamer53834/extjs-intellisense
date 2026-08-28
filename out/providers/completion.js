@@ -325,11 +325,17 @@ function provideObjectCompletion(document, beforeCursor) {
      *   grid.getStore().getAt(0).
      *   Ext.data.
      */
-    const dotMatch = beforeCursor.match(/^(.*)\.([A-Za-z_$][\w$]*)?$/);
+    const dotMatch = beforeCursor.match(/^(.*?)(?:\.([A-Za-z_$][\w$]*))?$/);
     if (!dotMatch) {
         return result;
     }
-    const expression = dotMatch[1].trim();
+    /*
+     * Only proceed if we have a trailing dot.
+     */
+    if (!dotMatch[1].endsWith(".")) {
+        return result;
+    }
+    const expression = dotMatch[1].slice(0, -1).trim();
     const prefix = dotMatch[2] || "";
     /*
      * Ext namespace.

@@ -602,15 +602,24 @@ function provideObjectCompletion(
      */
     const dotMatch =
         beforeCursor.match(
-            /^(.*)\.([A-Za-z_$][\w$]*)?$/
+            /^(.*?)(?:\.([A-Za-z_$][\w$]*))?$/
         );
 
     if (!dotMatch) {
         return result;
     }
 
+    /*
+     * Only proceed if we have a trailing dot.
+     */
+    if (
+        !dotMatch[1].endsWith(".")
+    ) {
+        return result;
+    }
+
     const expression =
-        dotMatch[1].trim();
+        dotMatch[1].slice(0, -1).trim();
 
     const prefix =
         dotMatch[2] || "";
