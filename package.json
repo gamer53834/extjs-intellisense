@@ -1,0 +1,51 @@
+{
+  "name": "extjs-intellisense",
+  "displayName": "ExtJS IntelliSense",
+  "description": "IntelliSense support for ExtJS",
+  "version": "0.0.1",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:typescript"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+      "command": "extjsIntellisense.reload",
+      "title": "ExtJS: Reload Index"
+    },
+    {
+      "command": "extjsIntellisense.rebuildIndex",
+      "title": "ExtJS: Rebuild Index"
+    }
+    ],
+    "configuration": {
+      "title": "ExtJS IntelliSense",
+      "properties": {
+        "extjsIntellisense.extjsPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to ExtJS root directory"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "check": "tsc --noEmit -p ./",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.0.0"
+  }
+}

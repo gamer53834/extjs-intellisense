@@ -1,0 +1,277 @@
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ExtJSHoverProvider = void 0;
+exports.setHoverResolver = setHoverResolver;
+const vscode = __importStar(require("vscode"));
+const analyzer_1 = require("../analyzer");
+const localization_1 = require("../localization");
+let resolver;
+/**
+ * Устанавливает Resolver.
+ */
+function setHoverResolver(value) {
+    resolver = value;
+}
+/**
+ * Извлекает выражение перед курсором.
+ *
+ * Например:
+ *
+ * grid.getStore
+ * grid.getStore()
+ * store.getProxy
+ * Ext.grid.Panel
+ */
+function extractHoverExpression(line, position) {
+    const left = line.substring(0, position);
+    /*
+     * Убираем скобки после вызова:
+     *
+     * grid.getStore()
+     *
+     * превращается в:
+     *
+     * grid.getStore
+     */
+    const normalized = left
+        .replace(/\(\s*$/, "")
+        .replace(/\s+$/, "");
+    const match = normalized.match(/([A-Za-z_$][\w$]*(?:\s*\.\s*[A-Za-z_$][\w$]*)*)$/);
+    if (!match) {
+        return undefined;
+    }
+    return match[1]
+        .replace(/\s+/g, "");
+}
+/**
+ * Находит слово под курсором.
+ */
+function getWord(document, position) {
+    const range = document.getWordRangeAtPosition(position, /[A-Za-z_$][\w$]*/);
+    if (!range) {
+        return undefined;
+    }
+    return {
+        word: document.getText(range),
+        range
+    };
+}
+/**
+ * Создаёт Hover для метода / property.
+ */
+function createMemberHover(member) {
+    const markdown = new vscode.MarkdownString();
+    /*
+     * Сигнатура метода.
+     *
+     * Например:
+     *
+     * getStore()
+     */
+    if (member.kind === "method") {
+        markdown.appendCodeblock(member.signature ??
+            `${member.name}()`, "javascript");
+    }
+    else {
+        /*
+         * Property.
+         */
+        markdown.appendCodeblock(member.type
+            ? `${member.name}: ${member.type}`
+            : member.name, "javascript");
+    }
+    /*
+     * Описание.
+     *
+     * Только русское описание,
+     * если оно существует.
+     */
+    let description;
+    if (member.ownerClass) {
+        if (member.kind === "method") {
+            description =
+                (0, localization_1.getMethodDescription)(member.ownerClass, member.name);
+        }
+        else {
+            description =
+                (0, localization_1.getPropertyDescription)(member.ownerClass, member.name);
+        }
+    }
+    /*
+     * Если русского перевода нет —
+     * используем оригинальный JSDoc.
+     */
+    if (!description) {
+        description =
+            member.description;
+    }
+    if (description) {
+        markdown.appendMarkdown(`\n${description}\n`);
+    }
+    /*
+     * Входные параметры метода.
+     *
+     * ResolvedMember в текущем проекте
+     * может содержать args/params/parameters.
+     *
+     * Поэтому читаем их безопасно через unknown.
+     */
+    if (member.kind === "method") {
+        const rawMember = member;
+        const parameters = rawMember.parameters ??
+            rawMember.params ??
+            rawMember.args;
+        if (Array.isArray(parameters) &&
+            parameters.length > 0) {
+            markdown.appendMarkdown(`\n**Параметры:**\n`);
+            for (const parameter of parameters) {
+                if (typeof parameter === "string") {
+                    markdown.appendMarkdown(`- \`${parameter}\`\n`);
+                    continue;
+                }
+                if (typeof parameter !== "object" ||
+                    parameter === null) {
+                    continue;
+                }
+                const p = parameter;
+                const name = typeof p.name === "string"
+                    ? p.name
+                    : "parameter";
+                const type = typeof p.type === "string"
+                    ? p.type
+                    : undefined;
+                const parameterDescription = typeof p.description === "string"
+                    ? p.description
+                    : undefined;
+                let line = `- \`${name}`;
+                if (type) {
+                    line +=
+                        `: ${type}`;
+                }
+                line += "`";
+                if (parameterDescription) {
+                    line +=
+                        ` — ${parameterDescription}`;
+                }
+                markdown.appendMarkdown(`${line}\n`);
+            }
+        }
+    }
+    return markdown;
+}
+/**
+ * Hover provider.
+ */
+class ExtJSHoverProvider {
+    provideHover(document, position) {
+        if (!resolver) {
+            return undefined;
+        }
+        const wordInfo = getWord(document, position);
+        if (!wordInfo) {
+            return undefined;
+        }
+        const line = document.lineAt(position.line).text;
+        const expression = extractHoverExpression(line, position.character);
+        if (!expression) {
+            return undefined;
+        }
+        console.log(`[ExtJS Hover] Word: ${wordInfo.word}`);
+        console.log(`[ExtJS Hover] Expression: ${expression}`);
+        const variables = (0, analyzer_1.detectVariables)(document, resolver);
+        console.log("[ExtJS Hover] Variables:", variables);
+        /*
+         * -----------------------------------------------
+         * Если курсор на переменной:
+         *
+         * const grid = Ext.create('Ext.grid.Panel');
+         *
+         *              ^^^^
+         * -----------------------------------------------
+         */
+        if (expression === wordInfo.word) {
+            const type = resolver.resolveExpression(expression, variables);
+            if (type.kind !== "class") {
+                return undefined;
+            }
+            return undefined;
+        }
+        /*
+         * -----------------------------------------------
+         * Expression:
+         *
+         * grid.getStore
+         *
+         * или:
+         *
+         * grid.getStore()
+         * -----------------------------------------------
+         */
+        const lastDot = expression.lastIndexOf(".");
+        if (lastDot < 0) {
+            return undefined;
+        }
+        const memberName = expression.substring(lastDot + 1);
+        if (memberName !== wordInfo.word) {
+            return undefined;
+        }
+        const parentExpression = expression.substring(0, lastDot);
+        console.log(`[ExtJS Hover] Parent: ${parentExpression}`);
+        console.log(`[ExtJS Hover] Member: ${memberName}`);
+        /*
+         * Определяем тип объекта.
+         *
+         * grid
+         * grid.getStore()
+         */
+        const parentType = resolver.resolveExpression(parentExpression, variables);
+        console.log("[ExtJS Hover] Parent type:", parentType);
+        if (parentType.kind !== "class") {
+            return undefined;
+        }
+        /*
+         * Ищем member с inheritance.
+         */
+        const member = resolver.findMember(parentType.name, memberName);
+        console.log("[ExtJS Hover] Member:", member);
+        if (!member) {
+            return undefined;
+        }
+        return new vscode.Hover(createMemberHover(member), wordInfo.range);
+    }
+}
+exports.ExtJSHoverProvider = ExtJSHoverProvider;
+//# sourceMappingURL=hover.js.map
