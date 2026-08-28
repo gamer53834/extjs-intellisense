@@ -1,0 +1,415 @@
+{
+  "classes": {
+    "Ext.grid.Panel": {
+      "name": "Ext.grid.Panel",
+      "extends": "Ext.panel.Table",
+      "methods": {
+        "getStore": {
+          "name": "getStore",
+          "signature": "getStore()",
+          "returns": "Ext.data.Store",
+          "description": "Returns the store"
+        },
+        "getSelectionModel": {
+          "name": "getSelectionModel",
+          "signature": "getSelectionModel()",
+          "returns": "Ext.selection.Model",
+          "description": "Returns the selection model"
+        },
+        "getView": {
+          "name": "getView",
+          "signature": "getView()",
+          "returns": "Ext.view.Table",
+          "description": "Returns the view"
+        }
+      },
+      "properties": {
+        "store": {
+          "name": "store",
+          "type": "Ext.data.Store",
+          "description": "The store"
+        }
+      }
+    },
+    "Ext.data.Store": {
+      "name": "Ext.data.Store",
+      "extends": "Ext.data.AbstractStore",
+      "methods": {
+        "load": {
+          "name": "load",
+          "signature": "load(options)",
+          "returns": "void",
+          "description": "Loads data"
+        },
+        "getCount": {
+          "name": "getCount",
+          "signature": "getCount()",
+          "returns": "Number",
+          "description": "Returns count"
+        },
+        "getAt": {
+          "name": "getAt",
+          "signature": "getAt(index)",
+          "returns": "Ext.data.Model",
+          "description": "Returns record at index"
+        },
+        "getById": {
+          "name": "getById",
+          "signature": "getById(id)",
+          "returns": "Ext.data.Model",
+          "description": "Returns record by id"
+        },
+        "getRange": {
+          "name": "getRange",
+          "signature": "getRange(start, end)",
+          "returns": "Ext.data.Model[]",
+          "description": "Returns range of records"
+        },
+        "first": {
+          "name": "first",
+          "signature": "first()",
+          "returns": "Ext.data.Model",
+          "description": "Returns first record"
+        },
+        "last": {
+          "name": "last",
+          "signature": "last()",
+          "returns": "Ext.data.Model",
+          "description": "Returns last record"
+        },
+        "getByInternalId": {
+          "name": "getByInternalId",
+          "signature": "getByInternalId(internalId)",
+          "returns": "Ext.data.Model",
+          "description": "Returns record by internal id"
+        },
+        "getData": {
+          "name": "getData",
+          "signature": "getData()",
+          "returns": "Object",
+          "description": "Returns all data"
+        },
+        "getProxy": {
+          "name": "getProxy",
+          "signature": "getProxy()",
+          "returns": "Ext.data.proxy.Proxy",
+          "description": "Returns the proxy"
+        },
+        "sync": {
+          "name": "sync",
+          "signature": "sync(options)",
+          "returns": "Ext.data.Store",
+          "description": "Syncs data"
+        },
+        "each": {
+          "name": "each",
+          "signature": "each(fn, scope)",
+          "returns": "void",
+          "description": "Iterates records"
+        },
+        "filter": {
+          "name": "filter",
+          "signature": "filter(filters)",
+          "returns": "void",
+          "description": "Filters data"
+        },
+        "clearFilter": {
+          "name": "clearFilter",
+          "signature": "clearFilter()",
+          "returns": "void",
+          "description": "Clears filters"
+        },
+        "sort": {
+          "name": "sort",
+          "signature": "sort(sorters)",
+          "returns": "void",
+          "description": "Sorts data"
+        },
+        "add": {
+          "name": "add",
+          "signature": "add(records)",
+          "returns": "Ext.data.Model[]",
+          "description": "Adds records"
+        },
+        "remove": {
+          "name": "remove",
+          "signature": "remove(records)",
+          "returns": "Ext.data.Model[]",
+          "description": "Removes records"
+        },
+        "removeAll": {
+          "name": "removeAll",
+          "signature": "removeAll()",
+          "returns": "void",
+          "description": "Removes all records"
+        },
+        "reload": {
+          "name": "reload",
+          "signature": "reload(options)",
+          "returns": "void",
+          "description": "Reloads data"
+        }
+      },
+      "properties": {
+        "proxy": {
+          "name": "proxy",
+          "type": "Ext.data.proxy.Proxy",
+          "description": "The proxy"
+        },
+        "model": {
+          "name": "model",
+          "type": "Ext.data.Model",
+          "description": "The model"
+        },
+        "totalCount": {
+          "name": "totalCount",
+          "type": "Number",
+          "description": "Total count"
+        }
+      }
+    },
+    "Ext.selection.Model": {
+      "name": "Ext.selection.Model",
+      "extends": "Ext.util.Observable",
+      "methods": {
+        "getSelection": {
+          "name": "getSelection",
+          "signature": "getSelection()",
+          "returns": "Ext.data.Model[]",
+          "description": "Returns selected records"
+        },
+        "selectAll": {
+          "name": "selectAll",
+          "signature": "selectAll()",
+          "returns": "void",
+          "description": "Selects all"
+        },
+        "deselectAll": {
+          "name": "deselectAll",
+          "signature": "deselectAll()",
+          "returns": "void",
+          "description": "Deselects all"
+        },
+        "select": {
+          "name": "select",
+          "signature": "select(records)",
+          "returns": "void",
+          "description": "Selects records"
+        },
+        "deselect": {
+          "name": "deselect",
+          "signature": "deselect(records)",
+          "returns": "void",
+          "description": "Deselects records"
+        },
+        "isSelected": {
+          "name": "isSelected",
+          "signature": "isSelected(record)",
+          "returns": "Boolean",
+          "description": "Checks if selected"
+        },
+        "getCount": {
+          "name": "getCount",
+          "signature": "getCount()",
+          "returns": "Number",
+          "description": "Returns selection count"
+        }
+      },
+      "properties": {
+        "selected": {
+          "name": "selected",
+          "type": "Ext.util.MixedCollection",
+          "description": "Selected records"
+        }
+      }
+    },
+    "Ext.data.Model": {
+      "name": "Ext.data.Model",
+      "extends": "Ext.util.Observable",
+      "methods": {
+        "get": {
+          "name": "get",
+          "signature": "get(fieldName)",
+          "returns": "Object",
+          "description": "Returns field value"
+        },
+        "set": {
+          "name": "set",
+          "signature": "set(fieldName, value)",
+          "returns": "void",
+          "description": "Sets field value"
+        },
+        "save": {
+          "name": "save",
+          "signature": "save(options)",
+          "returns": "void",
+          "description": "Saves record"
+        },
+        "destroy": {
+          "name": "destroy",
+          "signature": "destroy(options)",
+          "returns": "void",
+          "description": "Destroys record"
+        },
+        "getId": {
+          "name": "getId",
+          "signature": "getId()",
+          "returns": "Object",
+          "description": "Returns id"
+        },
+        "isValid": {
+          "name": "isValid",
+          "signature": "isValid()",
+          "returns": "Boolean",
+          "description": "Checks validity"
+        },
+        "validate": {
+          "name": "validate",
+          "signature": "validate()",
+          "returns": "Ext.data.Errors",
+          "description": "Validates record"
+        },
+        "beginEdit": {
+          "name": "beginEdit",
+          "signature": "beginEdit()",
+          "returns": "void",
+          "description": "Begins edit"
+        },
+        "endEdit": {
+          "name": "endEdit",
+          "signature": "endEdit()",
+          "returns": "void",
+          "description": "Ends edit"
+        },
+        "cancelEdit": {
+          "name": "cancelEdit",
+          "signature": "cancelEdit()",
+          "returns": "void",
+          "description": "Cancels edit"
+        },
+        "copy": {
+          "name": "copy",
+          "signature": "copy(newId)",
+          "returns": "Ext.data.Model",
+          "description": "Copies record"
+        }
+      },
+      "properties": {
+        "id": {
+          "name": "id",
+          "type": "Object",
+          "description": "Record id"
+        },
+        "phantom": {
+          "name": "phantom",
+          "type": "Boolean",
+          "description": "Is phantom"
+        },
+        "dirty": {
+          "name": "dirty",
+          "type": "Boolean",
+          "description": "Is dirty"
+        },
+        "fields": {
+          "name": "fields",
+          "type": "Ext.util.MixedCollection",
+          "description": "Fields"
+        }
+      }
+    },
+    "Ext.view.Table": {
+      "name": "Ext.view.Table",
+      "extends": "Ext.Component",
+      "methods": {
+        "getRecord": {
+          "name": "getRecord",
+          "signature": "getRecord(node)",
+          "returns": "Ext.data.Model",
+          "description": "Returns record"
+        },
+        "getNode": {
+          "name": "getNode",
+          "signature": "getNode(record)",
+          "returns": "HTMLElement",
+          "description": "Returns node"
+        },
+        "getSelectedNodes": {
+          "name": "getSelectedNodes",
+          "signature": "getSelectedNodes()",
+          "returns": "HTMLElement[]",
+          "description": "Returns selected nodes"
+        },
+        "focusRow": {
+          "name": "focusRow",
+          "signature": "focusRow(record)",
+          "returns": "void",
+          "description": "Focuses row"
+        },
+        "scrollTo": {
+          "name": "scrollTo",
+          "signature": "scrollTo(record)",
+          "returns": "void",
+          "description": "Scrolls to record"
+        }
+      },
+      "properties": {}
+    },
+    "Ext.data.proxy.Proxy": {
+      "name": "Ext.data.proxy.Proxy",
+      "extends": "Ext.util.Observable",
+      "methods": {
+        "getReader": {
+          "name": "getReader",
+          "signature": "getReader()",
+          "returns": "Ext.data.reader.Reader",
+          "description": "Returns reader"
+        },
+        "getWriter": {
+          "name": "getWriter",
+          "signature": "getWriter()",
+          "returns": "Ext.data.writer.Writer",
+          "description": "Returns writer"
+        }
+      },
+      "properties": {}
+    },
+    "Ext.data.reader.Reader": {
+      "name": "Ext.data.reader.Reader",
+      "extends": "Ext.util.Observable",
+      "methods": {
+        "getRoot": {
+          "name": "getRoot",
+          "signature": "getRoot(data)",
+          "returns": "String",
+          "description": "Returns root"
+        }
+      },
+      "properties": {}
+    },
+    "Ext.data.writer.Writer": {
+      "name": "Ext.data.writer.Writer",
+      "extends": "Ext.util.Observable",
+      "methods": {},
+      "properties": {}
+    },
+    "Ext.form.Basic": {
+      "name": "Ext.form.Basic",
+      "extends": "Ext.util.Observable",
+      "methods": {
+        "getRecord": {
+          "name": "getRecord",
+          "signature": "getRecord()",
+          "returns": "Ext.data.Model",
+          "description": "Returns record"
+        }
+      },
+      "properties": {}
+    },
+    "Ext.grid.ColumnManager": {
+      "name": "Ext.grid.ColumnManager",
+      "extends": "Ext.util.Observable",
+      "methods": {},
+      "properties": {}
+    }
+  }
+}

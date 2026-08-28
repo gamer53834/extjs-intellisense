@@ -1,10 +1,14 @@
-
-target/
+```
+# Build outputs
+out/
+dist/
+build/
 
 # Dependencies
 node_modules/
-vendor/
-lib/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Logs
 *.log
@@ -20,7 +24,7 @@ lib/
 *.swp
 *.swo
 
-# OS
+# OS generated files
 .DS_Store
 Thumbs.db
 
@@ -36,42 +40,20 @@ __pycache__/
 *.pyd
 .Python
 *.so
+*.egg-info/
+.eggs/
 
 # Node.js
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Compiled files
-*.o
-*.obj
-*.exe
-*.dll
-*.so
-*.a
-*.out
+# TypeScript
+*.tsbuildinfo
+*.js.map
 
-# Compressed
-*.zip
-*.gz
-*.tar
-*.tgz
-*.bz2
-*.xz
-*.7z
-*.rar
-*.zst
-*.lz4
-*.lzh
-*.cab
-*.arj
-*.rpm
-*.deb
-*.Z
-*.lz
-*.lzo
-*.tar.gz
-*.tar.bz2
-*.tar.xz
-*.tar.zst
+# Temporary files
+*.tmp
+*.temp
 ```

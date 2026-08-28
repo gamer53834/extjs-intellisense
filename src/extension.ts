@@ -206,26 +206,68 @@ async function loadExtJSIndex(
     extjsPath: string
 ): Promise<boolean> {
 
-    const indexPath =
-        await ensureIndex(
-            extjsPath
+    /*
+     * Try to use bundled index first.
+     */
+    const bundledIndexPath =
+        path.join(
+            __dirname,
+            "..",
+            "data",
+            "classes.json"
         );
 
-    if (!indexPath) {
+    console.log(
+        `[ExtJS] Looking for bundled index at: ${bundledIndexPath}`
+    );
+
+    let indexPath: string | undefined;
+    let content: string;
+
+    if (
+        fs.existsSync(bundledIndexPath)
+    ) {
+
+        console.log(
+            `[ExtJS] Using bundled index: ${bundledIndexPath}`
+        );
+
+        indexPath = bundledIndexPath;
+        content = fs.readFileSync(
+            bundledIndexPath,
+            "utf8"
+        );
+
+    } else if (extjsPath) {
+
+        indexPath =
+            await ensureIndex(
+                extjsPath
+            );
+
+        if (!indexPath) {
+            return false;
+        }
+
+        console.log(
+            `[ExtJS] Loading index: ${indexPath}`
+        );
+
+        content = fs.readFileSync(
+            indexPath,
+            "utf8"
+        );
+
+    } else {
+
+        console.error(
+            "[ExtJS] No index available"
+        );
+
         return false;
     }
 
-    console.log(
-        `[ExtJS] Loading index: ${indexPath}`
-    );
-
     try {
-
-        const content =
-            fs.readFileSync(
-                indexPath,
-                "utf8"
-            );
 
         const index =
             JSON.parse(
