@@ -108,13 +108,31 @@ async function ensureIndex(extjsPath) {
  * Загружает classes.json.
  */
 async function loadExtJSIndex(extjsPath) {
-    const indexPath = await ensureIndex(extjsPath);
-    if (!indexPath) {
+    /*
+     * Try to use bundled index first.
+     */
+    const bundledIndexPath = path.join(__dirname, "..", "data", "classes.json");
+    let indexPath;
+    let content;
+    if (fs.existsSync(bundledIndexPath)) {
+        console.log(`[ExtJS] Using bundled index: ${bundledIndexPath}`);
+        indexPath = bundledIndexPath;
+        content = fs.readFileSync(bundledIndexPath, "utf8");
+    }
+    else if (extjsPath) {
+        indexPath =
+            await ensureIndex(extjsPath);
+        if (!indexPath) {
+            return false;
+        }
+        console.log(`[ExtJS] Loading index: ${indexPath}`);
+        content = fs.readFileSync(indexPath, "utf8");
+    }
+    else {
+        console.error("[ExtJS] No index available");
         return false;
     }
-    console.log(`[ExtJS] Loading index: ${indexPath}`);
     try {
-        const content = fs.readFileSync(indexPath, "utf8");
         const index = JSON.parse(content);
         if (!index.classes) {
             console.error("[ExtJS] Invalid classes.json: missing classes");
