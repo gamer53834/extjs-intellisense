@@ -87,12 +87,72 @@ export const classes: Record<string, ExtClass> = {
                 description: "Returns the number of records."
             },
             {
+                name: "getAt",
+                signature: "getAt(index: number): Ext.data.Model",
+                description: "Returns the record at the specified index."
+            },
+            {
+                name: "getById",
+                signature: "getById(id: any): Ext.data.Model",
+                description: "Returns the record with the specified id."
+            },
+            {
+                name: "getRange",
+                signature: "getRange(start?: number, end?: number): Ext.data.Model[]",
+                description: "Returns a range of records."
+            },
+            {
+                name: "first",
+                signature: "first(): Ext.data.Model",
+                description: "Returns the first record."
+            },
+            {
+                name: "last",
+                signature: "last(): Ext.data.Model",
+                description: "Returns the last record."
+            },
+            {
+                name: "getByInternalId",
+                signature: "getByInternalId(internalId: string): Ext.data.Model",
+                description: "Returns the record by internal id."
+            },
+            {
+                name: "getData",
+                signature: "getData(): Ext.util.Collection",
+                description: "Returns all data in the store."
+            },
+            {
+                name: "getProxy",
+                signature: "getProxy(): Ext.data.proxy.Proxy",
+                description: "Returns the proxy."
+            },
+            {
+                name: "sync",
+                signature: "sync(options?): void",
+                description: "Synchronizes the data with the server."
+            },
+            {
+                name: "each",
+                signature: "each(fn: Function, scope?: object): void",
+                description: "Executes a function for each record."
+            },
+            {
                 name: "add",
                 signature: "add(record): void"
             },
             {
                 name: "remove",
                 signature: "remove(record): void"
+            },
+            {
+                name: "removeAll",
+                signature: "removeAll(): void",
+                description: "Removes all records."
+            },
+            {
+                name: "clearFilter",
+                signature: "clearFilter(suppressEvent?: boolean): void",
+                description: "Clears all filters."
             }
         ],
 
@@ -108,6 +168,11 @@ export const classes: Record<string, ExtClass> = {
             {
                 name: "proxy",
                 type: "Ext.data.proxy.Proxy"
+            },
+            {
+                name: "totalCount",
+                type: "number",
+                description: "Total number of records."
             }
         ]
     },
@@ -184,6 +249,57 @@ export const classes: Record<string, ExtClass> = {
             {
                 name: "selModel",
                 type: "Ext.selection.Model"
+            }
+        ]
+    },
+
+    "Ext.selection.Model": {
+        name: "Ext.selection.Model",
+        extends: "Ext.util.Observable",
+
+        methods: [
+            {
+                name: "getSelection",
+                signature: "getSelection(): Ext.data.Model[]",
+                description: "Returns the selected records."
+            },
+            {
+                name: "selectAll",
+                signature: "selectAll(): void",
+                description: "Selects all records."
+            },
+            {
+                name: "deselectAll",
+                signature: "deselectAll(): void",
+                description: "Deselects all records."
+            },
+            {
+                name: "select",
+                signature: "select(records): void",
+                description: "Selects the specified records."
+            },
+            {
+                name: "deselect",
+                signature: "deselect(records): void",
+                description: "Deselects the specified records."
+            },
+            {
+                name: "isSelected",
+                signature: "isSelected(record: Ext.data.Model): boolean",
+                description: "Checks if a record is selected."
+            },
+            {
+                name: "getCount",
+                signature: "getCount(): number",
+                description: "Returns the number of selected records."
+            }
+        ],
+
+        properties: [
+            {
+                name: "selected",
+                type: "Ext.util.MixedCollection",
+                description: "Collection of selected records."
             }
         ]
     },
