@@ -1,9 +1,3 @@
-```
-# Build outputs
-out/
-dist/
-build/
+```json
 
-# Source maps
-*.map
 ```
